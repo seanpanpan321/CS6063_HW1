@@ -1,15 +1,29 @@
 language: python
 python:
-- '3.11'
+  - '3.11'
 dist: focal
 services:
-- sqlite3
+  - sqlite3
+
 before_install:
-- sudo apt-get update
-- sudo apt-get install sqlite3 libsqlite3-dev
-- sqlite3 --version
+  - sudo apt-get update
+  - sudo apt-get install sqlite3 libsqlite3-dev
+  - sqlite3 --version
+
 install:
-- pip install -r requirements.txt
+  - pip install -r requirements.txt
+
 script:
-- python3 manage.py migrate
-- python3 manage.py test polls
+  - python3 manage.py migrate
+  - python3 manage.py test polls
+
+deploy:
+  provider: elasticbeanstalk
+  access_key_id:
+    secure: "dRF/WEupJMGM9QuC9/8ncRKa3tZkMSbYvyEfhJrTYmdpEhNZtWm9a1mbD7doYuBQb62GRAh0NaHHO3DpvG9c498qZm8oOeY+ABd6ODevujH4YiEkXtu69jpSbmanfBDucXicj5JigfY0P+tNFByHdVKkrkIc9+4r+0O4bzVUZ+V4HZBbUVxHS67dzn4hochjrZIFIFGAabq7buZcXjKa1/KbvCg/VWSaELTaiUyh8eE/65oqowHzbAZMZGQVIVdnA3uff20Rn2sv9bhSZwb/HXfvyGtYig6XTitbkw8GNMUFWlB87Mp569dwDNyXvx1Yjt41AX8e+HG5C1Dc1I6wlVRElWeGROMzYDKK8MtqsJgp61TfaZG5vfEYkkHleFyfDjYvnAHleCl3ksXqh4vtn8sO6AxkcO/e26K4JzSAZd+eRoI6OhrUJdTrezeZcUu37p/fDFgHT31MiPTAp56UpIMCDIfdSWvsM4tV3Is4xU+RHRNgz1TELxJo0aSG6T72YdySw8QZTsvvYwp3ReNNah206wh9RWn3u76uiJOpOgKQh3ly4CgiyAfronKNCi3T+wvOhxujCKRAqSirkiSTFzcIdVmKBBa+g4WKvZi69546a8+l4LcBNpFhShLEICfayosK4erJgclv1q01n/lsRakRuL2ALuw+mrRCa+nGAsM="
+  secret_access_key:
+    secure: "QoEKNoOKGt5VcfNfKOQz8a0N2R4fRT9UFrE4st49Ps5KLqo76Z8iHoBYOf13KhTmNllvYc6jgWvp0u2HUhnWKjdylSlb36q4GqIEM8RMJu+fa9ukXOC/eJDIBny5n7V5gm+kkA3ytZF6WJYBHQvbw56OCX5zlpCP+BHjbHjHAHUPjBWHtUv/xstIfXWizMk98zaEAaLMp4HKD3qwTe9lyb11gcARq99Qqz4oX9HfPZMyg8O68hunqlkendnaNyccRFrWARGV6ueF7s8TmVL1Lv8eas1i8dw2IeTpuFlTpf1oXM2mDx9ACj8koUZdZZ9EpYdbab6TDTcCYphhqpEooVhxxV7u2MYpcUBz7nwS2QH91UCVPSmsi6a3EkZMVDhhOixXGsJDgn6nbDQQxc2NNjPlh4wW6A2PMqQCGQxFgLt4FVvYMa9gVDesQAJM2VXwyLjPH65h6J3sFG02pY+EhAYhIHXPaXXz8bikweehONFPWZUhPxsjT36XI+5Khh/HkEbd4gMK4IB+rH9cnL9TSOTTDjTIXpE00Jv1dIGm2Hair60aXjgqRFtoYL0CTjjVElssLm62W/ZtY/hyeMOdCVOd6XIDv32vgXHWwNHxiWFTMTMQLIz2Qg0Tid9M2vlK69lCbc/fuL288/DcW6CgITU6Gkro5SGUadtdAIZc+RM="
+  region: "us-east-1"
+  app: "polls"
+  env: "Polls-env"
+  bucket_name: "elasticbeanstalk-us-east-1-522814719927"
