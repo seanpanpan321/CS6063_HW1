@@ -1,32 +1,38 @@
 language: python
 python:
-- '3.11'
+  - '3.11'
 dist: focal
 services:
-- sqlite3
+  - sqlite3
+
 before_install:
-- sudo apt-get update
-- sudo apt-get install sqlite3 libsqlite3-dev
-- sqlite3 --version
+  - sudo apt-get update
+  - sudo apt-get install sqlite3 libsqlite3-dev
+  - sqlite3 --version
+  - pip install awscli  # Install AWS CLI if needed
+
 install:
-- pip install -r requirements.txt
+  - pip install -r requirements.txt
+
 script:
-- python3 manage.py migrate
-- python3 manage.py test polls
+  - python3 manage.py migrate
+  - python3 manage.py test polls
+
+before_deploy:
+  - echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
+  - echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+  - echo "Bucket Name: elasticbeanstalk-us-east-1-522814719927"
+  - aws s3 ls s3://elasticbeanstalk-us-east-1-522814719927 || echo "Bucket not accessible"
+
 deploy:
   provider: elasticbeanstalk
-  dpl_version: 1.10.16
   access_key_id:
-    secure: dRF/WEupJMGM9QuC9/8ncRKa3tZkMSbYvyEfhJrTYmdpEhNZtWm9a1mbD7doYuBQb62GRAh0NaHHO3DpvG9c498qZm8oOeY+ABd6ODevujH4YiEkXtu69jpSbmanfBDucXicj5JigfY0P+tNFByHdVKkrkIc9+4r+0O4bzVUZ+V4HZBbUVxHS67dzn4hochjrZIFIFGAabq7buZcXjKa1/KbvCg/VWSaELTaiUyh8eE/65oqowHzbAZMZGQVIVdnA3uff20Rn2sv9bhSZwb/HXfvyGtYig6XTitbkw8GNMUFWlB87Mp569dwDNyXvx1Yjt41AX8e+HG5C1Dc1I6wlVRElWeGROMzYDKK8MtqsJgp61TfaZG5vfEYkkHleFyfDjYvnAHleCl3ksXqh4vtn8sO6AxkcO/e26K4JzSAZd+eRoI6OhrUJdTrezeZcUu37p/fDFgHT31MiPTAp56UpIMCDIfdSWvsM4tV3Is4xU+RHRNgz1TELxJo0aSG6T72YdySw8QZTsvvYwp3ReNNah206wh9RWn3u76uiJOpOgKQh3ly4CgiyAfronKNCi3T+wvOhxujCKRAqSirkiSTFzcIdVmKBBa+g4WKvZi69546a8+l4LcBNpFhShLEICfayosK4erJgclv1q01n/lsRakRuL2ALuw+mrRCa+nGAsM=
+    secure: "dRF/WEupJMGM9QuC9/8ncRKa3tZkMSbYvyEfhJrTYmdpEhNZtWm9a1mbD7doYuBQb62GRAh0NaHHO3DpvG9c498qZm8oOeY+ABd6ODevujH4YiEkXtu69jpSbmanfBDucXicj5JigfY0P+tNFByHdVKkrkIc9+4r+0O4bzVUZ+V4HZBbUVxHS67dzn4hochjrZIFIFGAabq7buZcXjKa1/KbvCg/VWSaELTaiUyh8eE/65oqowHzbAZMZGQVIVdnA3uff20Rn2sv9bhSZwb/HXfvyGtYig6XTitbkw8GNMUFWlB87Mp569dwDNyXvx1Yjt41AX8e+HG5C1Dc1I6wlVRElWeGROMzYDKK8MtqsJgp61TfaZG5vfEYkkHleFyfDjYvnAHleCl3ksXqh4vtn8sO6AxkcO/e26K4JzSAZd+eRoI6OhrUJdTrezeZcUu37p/fDFgHT31MiPTAp56UpIMCDIfdSWvsM4tV3Is4xU+RHRNgz1TELxJo0aSG6T72YdySw8QZTsvvYwp3ReNNah206wh9RWn3u76uiJOpOgKQh3ly4CgiyAfronKNCi3T+wvOhxujCKRAqSirkiSTFzcIdVmKBBa+g4WKvZi69546a8+l4LcBNpFhShLEICfayosK4erJgclv1q01n/lsRakRuL2ALuw+mrRCa+nGAsM="
   secret_access_key:
-    secure: QoEKNoOKGt5VcfNfKOQz8a0N2R4fRT9UFrE4st49Ps5KLqo76Z8iHoBYOf13KhTmNllvYc6jgWvp0u2HUhnWKjdylSlb36q4GqIEM8RMJu+fa9ukXOC/eJDIBny5n7V5gm+kkA3ytZF6WJYBHQvbw56OCX5zlpCP+BHjbHjHAHUPjBWHtUv/xstIfXWizMk98zaEAaLMp4HKD3qwTe9lyb11gcARq99Qqz4oX9HfPZMyg8O68hunqlkendnaNyccRFrWARGV6ueF7s8TmVL1Lv8eas1i8dw2IeTpuFlTpf1oXM2mDx9ACj8koUZdZZ9EpYdbab6TDTcCYphhqpEooVhxxV7u2MYpcUBz7nwS2QH91UCVPSmsi6a3EkZMVDhhOixXGsJDgn6nbDQQxc2NNjPlh4wW6A2PMqQCGQxFgLt4FVvYMa9gVDesQAJM2VXwyLjPH65h6J3sFG02pY+EhAYhIHXPaXXz8bikweehONFPWZUhPxsjT36XI+5Khh/HkEbd4gMK4IB+rH9cnL9TSOTTDjTIXpE00Jv1dIGm2Hair60aXjgqRFtoYL0CTjjVElssLm62W/ZtY/hyeMOdCVOd6XIDv32vgXHWwNHxiWFTMTMQLIz2Qg0Tid9M2vlK69lCbc/fuL288/DcW6CgITU6Gkro5SGUadtdAIZc+RM=
-  region: us-east-1
-  app: polls
-  env: Polls-env
-  bucket_name: elasticbeanstalk-us-east-1-522814719927
+    secure: "QoEKNoOKGt5VcfNfKOQz8a0N2R4fRT9UFrE4st49Ps5KLqo76Z8iHoBYOf13KhTmNllvYc6jgWvp0u2HUhnWKjdylSlb36q4GqIEM8RMJu+fa9ukXOC/eJDIBny5n7V5gm+kkA3ytZF6WJYBHQvbw56OCX5zlpCP+BHjbHjHAHUPjBWHtUv/xstIfXWizMk98zaEAaLMp4HKD3qwTe9lyb11gcARq99Qqz4oX9HfPZMyg8O68hunqlkendnaNyccRFrWARGV6ueF7s8TmVL1Lv8eas1i8dw2IeTpuFlTpf1oXM2mDx9ACj8koUZdZZ9EpYdbab6TDTcCYphhqpEooVhxxV7u2MYpcUBz7nwS2QH91UCVPSmsi6a3EkZMVDhhOixXGsJDgn6nbDQQxc2NNjPlh4wW6A2PMqQCGQxFgLt4FVvYMa9gVDesQAJM2VXwyLjPH65h6J3sFG02pY+EhAYhIHXPaXXz8bikweehONFPWZUhPxsjT36XI+5Khh/HkEbd4gMK4IB+rH9cnL9TSOTTDjTIXpE00Jv1dIGm2Hair60aXjgqRFtoYL0CTjjVElssLm62W/ZtY/hyeMOdCVOd6XIDv32vgXHWwNHxiWFTMTMQLIz2Qg0Tid9M2vlK69lCbc/fuL288/DcW6CgITU6Gkro5SGUadtdAIZc+RM="
+  region: "us-east-1"
+  app: "polls"
+  env: "Polls-env"
+  bucket_name: "elasticbeanstalk-us-east-1-522814719927"
   on:
     branch: main
-env:
-  global:
-  - secure: 8K3haG/tre5oovpc8EawWg/G9E9+ag9OUWhjt63HhDz6yBOPflwtvYv04hWT+YzrVcSrhMH7o8lJI4MZAVlVWyM5PC1rTxtg8ypeRFB7yU27FU9Egd/IYchWppE7XKc4JolRRljY9fLwhGRtBn17s3w0AuF9554LwpnsoEDwIrbHJZIR3bewo7BgAR75Ejih7VDr0J3o373iiBlcGwFH0ACz54GW++XuHq/NJQPScJjhUVrP6zW9ozhyz4S7LIcRCpsW/GZOyY7N+PzWjuZpaWPQQdDjQzw+DMlTbntH4iauk5dIKDpA4ZpitBsUDv2vdFnxbn0S2nwB7S5VYTI3d2OE53Nf49iCYYWFyW/JWTCATMSqxCEZRNXwvmqWcqZRstcNd+3YmRdc2w9o81tUDAMW98NZqFFRLhsLFA5AiwTdDvyYnXraRHNlFC404WR9veV6ixcvQa96FePosmh76RlEviIRZeATkgxsWmjaxLHE+u1jMvDP7Nrz/ZK/k2Gb9WFdJoNX3eW5KzHZWGSSCAMl4+Vlq4ZkroT98MsGi2amAgC+l9ptWm+vOzyRc/i83Mns9K17vUXjspmAhtBtsHLlV3GSSbDdevHm07/DcuGF2I2K4uGGMdRmD41LFSS+FCTjyN9tjRBskVK6nZjJXwe/PGJ3aETNRBjVCdVzuyM=
-  - secure: 4U619sU5pcFEM7Z3CeD376ZUbungkZc0d97u0E/2l2G06o9xB3p/X9SR0TZzNOt/cAU53/5JbWuM3QepHxT2a3yHE7PsFmr+4O7vwEI5bgstsa//qW5im7nHgtlghssQQwZ7ZfMweAruroemz+h4UCyoxhX+2/pjxqNt2LPaVzGkPQYw6Vdbz4knJBdIGgyCs1zHJjNDwXkZzEuBvhHqlBisXwTq3x6gc/toMC+ajC0YzEm4kqtV/7nw4xW4YzKmC6SjGzpoAaKBT3gg4Gnux58Vk0HvcuERxC77G4cZ9po6pz61BJRogj4zMElYipc+/2+bjsYfK3G1SoXX1+8+fOWyUjw5O714SgVZRnsJbl+q70Zlg4HY6jsSoXQdm7LzTJF6cnmzSo2Gr3YfFR1kSeqCGenzkGHOSSPmMLn6MmzJ0bbyL3ps8gE4HUbyfnkXQEzUO4xcmVeI3mR3nPHqF3I/NeuYqlK8uJWU9B1EHvttzGnIfOlSmzEf1SB8PNyBecCF6vmKXwFo58/Lz9R15gYxh4RJTCA5lhzsgS7jwUIykkWbnPrcCk1yqQiVKMct2dCbk/CLvyewYKygynk5rsILoGkMrkGoeOBRJhDQdJ45cJLo+ynAtw3j4obUdhBaQlRYP6v0aqb78dy4DRBBw9CtUDWfjeyQjKE2h/wy1+w=
