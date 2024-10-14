@@ -12,10 +12,9 @@ before_install:
 install:
 - pip install -r requirements.txt
 script:
-- python3 manage.py migrate
-- python3 manage.py test polls
-before_deploy:
-- aws s3 ls s3://elasticbeanstalk-us-east-1-522814719927 || echo "Bucket not accessible"
+- black --check ./mysite ./polls
+- flake8 ./mysite ./polls
+- coverage run --source='polls,mysite' manage.py test
 deploy:
   provider: elasticbeanstalk
   access_key_id: "$AWS_ACCESS_KEY_ID"
