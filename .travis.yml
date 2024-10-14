@@ -15,14 +15,18 @@ script:
 - python3 manage.py migrate
 - python3 manage.py test polls
 before_deploy:
-  - aws s3 ls s3://elasticbeanstalk-us-east-1-522814719927 || echo "Bucket not accessible"
+- aws s3 ls s3://elasticbeanstalk-us-east-1-522814719927 || echo "Bucket not accessible"
 deploy:
   provider: elasticbeanstalk
-  access_key_id: $AWS_ACCESS_KEY_ID
-  secret_access_key: $AWS_SECRET_ACCESS_KEY
+  access_key_id: "$AWS_ACCESS_KEY_ID"
+  secret_access_key: "$AWS_SECRET_ACCESS_KEY"
   region: us-east-1
   app: polls
   env: Polls-env
   bucket_name: elasticbeanstalk-us-east-1-522814719927
   on:
     branch: main
+env:
+  global:
+  - secure: YsrUc682BgdlprupYmNWkP9cdyxbY45GI+zs5nBdACPE+NvJQqPYxeplhkkCouc/ktDbr7GeGPFVxZmUj3S9iD4eo21c1/YfaJobazGJlS2nUTfV+zkWDKhSGhR6uHB4s+1dLtzivARcEV6K+u7GZM+WtwPVa3iezSSQq/xIEyOJy3lgAyYaTEvseKWNT2K8j6uAxaxYV/I19ErpiBsIDPSzHkZoZvRL9JMIVDcGAmdHoDF6pRNycwnx6ga0bHnAaHouY6PT0Jz8V905VTsWej61JaTPlYP5l8UsEz+vY6eexOeAsopj+n1qYKRCWNaRUUlcCJGGuBWI9Vrtz7bHs1HQ60Mohg9DGTZv/+t0Oph56+CwgECywIDbmrWrwrMH59dVJjU13tRqu3O1h5Ov1S19RCVThFQb7UALSCexfZIZpywp0iD8JaMq+pWD7zv3ZGqEHc7ty3YEUlKLU+Nq86B0Fk4yE3pZO9ZYFDrx/rJKS6SGLJ0Mb1HHHGCUY/89f3s6TAJ+8r86eOC0qEepiYjepf+ZEjVSzjXCVQZBL11DUc+ZCsYEnBK9T91MsiDXF9fJwsFf/WhGo3odlQs/OQ/ZI+DAXoMIBy9GnI5SfBTObmb6qv2PpE02BZHnWyDaPJxCINoRuQ8x+8MFTBc1O6sLzsZp1SH9BQVINPeZ/dg=
+  - secure: bOWjeyVElRG9wBY2wnrbyxe7aKBQFFo7945lV5Jlk/X/z9ndwQrw6sgXE7Tigi55gA9/Tnvv2/mB3FHPpNCXKV+eVEu32aLGEsMBvgwKYr/7H059XiBaW8VL7M42PrVgyPhjbd+eyN1RYBzBc/SgHDlceP65KqfzYe9ntPvN6rT/ZkZOIyYEU16ol2ZTqLoYIRT3KiTrMheqqdecqsduOO6eX9CDYtX+jkEC0ULw0OP/rThxdYfQ4f+bngpQET+2O9gnvGabMOSabHzgEFpk5nccCoTGOvvLe1aVCfVPkw+3RCdCgjgzZ2dHjhYKeONk9L0ik3dBRR25oqk6gXXr6h9eL69MgwpxJK9PySQmbWM7oi4YNG86ET9tOyiEZi2r2V4Sfjrwg0hXJZbYH+VT1+ZAWYAl2RlqbHDzzM28ZzN2GMFGJIwQN4nwW3DevDeFpPkCEZiUMhWxvTBM8t6uwdbowNM8wtNFNIPSFv/Xu6CH6mw19pfOC8WZNz/rxyDoECa+wdZS2dxHHVWpAg6z7Fua/BShmn4+rNQug0Kk/w325tAv9gRe6750VF/ZMgBc/EbgG6GKRS1PlQECe/6CoXt0yaRLTaMwDe9q9V+J3MjtqAqwgxeg8Mj/8rhkIiFsm3hIZGym5EkKcIwH5d6Z9dAYCeSaoaPtuqdjvQv4Mjk=
