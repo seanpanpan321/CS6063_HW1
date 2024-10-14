@@ -1,25 +1,18 @@
 language: python
 python:
-- '3.11'
+  - '3.11'
 dist: focal
-services:
-- sqlite3
-before_install:
-- sudo apt-get update
-- sudo apt-get install sqlite3 libsqlite3-dev
-- sqlite3 --version
-- pip install awscli
 install:
-- pip install -r requirements.txt
+  - pip install -r requirements.txt
 before_script:
-- python manage.py migrate
-- python manage.py collectstatic --noinput
+  - python manage.py migrate
+  - python manage.py collectstatic --noinput
 script:
-- black --check ./mysite ./polls
-- flake8 ./mysite ./polls
-- coverage run --source='polls,mysite' manage.py test
+  - black --check ./mysite ./polls
+  - flake8 ./mysite ./polls
+  - coverage run --source='polls,mysite' manage.py test
 after_script:
-- coveralls
+  - coveralls
 deploy:
   provider: elasticbeanstalk
   access_key_id: "$AWS_ACCESS_KEY_ID"
