@@ -23,6 +23,3 @@ deploy:
   bucket_name: elasticbeanstalk-us-east-1-522814719927
   on:
     branch: main
-env:
-  global:
-    - COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN
